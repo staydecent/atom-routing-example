@@ -4,9 +4,7 @@ import vdom from 'virtual-dom'
 import main from 'main-loop'
 
 
-// CONSTS //
-
-let SET_URL = 'SET_URL'
+const SET_URL = 'SET_URL'
 
 
 // ACTIONS //

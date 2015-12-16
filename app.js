@@ -2210,8 +2210,6 @@ var _mainLoop = require('main-loop');
 
 var _mainLoop2 = _interopRequireDefault(_mainLoop);
 
-// CONSTS //
-
 var SET_URL = 'SET_URL';
 
 // ACTIONS //
