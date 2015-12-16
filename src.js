@@ -25,6 +25,9 @@ function setUrl(url) {
   }
 }
 
+// User navigation (ex. browser back button)
+window.onpopstate = () => store.dispatch(setUrl(window.location.pathname))
+
 
 // STATE //
 

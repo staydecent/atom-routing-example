@@ -96,7 +96,9 @@ function drainQueue() {
         currentQueue = queue;
         queue = [];
         while (++queueIndex < len) {
-            currentQueue[queueIndex].run();
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
         }
         queueIndex = -1;
         len = queue.length;
@@ -148,7 +150,6 @@ process.binding = function (name) {
     throw new Error('process.binding is not supported');
 };
 
-// TODO(shtylman)
 process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
@@ -189,10 +190,12 @@ function main(initialState, view, opts) {
 
     currentState = null
 
-    return {
+    var loop = {
+        state: initialState,
         target: target,
         update: update
     }
+    return loop
 
     function update(state) {
         if (inRenderingTransaction) {
@@ -208,10 +211,11 @@ function main(initialState, view, opts) {
         }
 
         currentState = state
+        loop.state = state
     }
 
     function redraw() {
-        redrawScheduled = false;
+        redrawScheduled = false
         if (currentState === null) {
             return
         }
@@ -333,12 +337,14 @@ function template(string) {
 },{}],7:[function(require,module,exports){
 module.exports = extend
 
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
 function extend(target) {
     for (var i = 1; i < arguments.length; i++) {
         var source = arguments[i]
 
         for (var key in source) {
-            if (source.hasOwnProperty(key)) {
+            if (hasOwnProperty.call(source, key)) {
                 target[key] = source[key]
             }
         }
@@ -2223,6 +2229,11 @@ function setUrl(url) {
     data: url
   };
 }
+
+// User navigation (ex. browser back button)
+window.onpopstate = function () {
+  return store.dispatch(setUrl(window.location.pathname));
+};
 
 // STATE //
 
